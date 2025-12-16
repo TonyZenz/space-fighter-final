@@ -16,6 +16,12 @@ class Level
 
 public:
 
+	// Called when the boss is defeated
+	virtual void OnBossDefeated() {}
+
+
+	std::vector<Projectile*>* GetProjectilePool() { return &m_projectiles; }
+
 	/** @brief Instantiate a level object. */
 	Level();
 	virtual ~Level();

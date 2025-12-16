@@ -1,13 +1,17 @@
 
-
-#include "Level02.h"
+#include "Level01.h"
 #include "BioEnemyShip.h"
+#include "EnemyBossShip.h"
+#include "Blaster.h"
+#include "GameplayScreen.h"
 
 
 void Level02::LoadContent(ResourceManager& resourceManager)
 {
 	// Setup enemy ships
 	Texture* pTexture = resourceManager.Load<Texture>("Textures\\BioEnemyShip.png");
+
+	Texture* pBossTexture = resourceManager.Load<Texture>("Textures\\BioEnemyBoss.png");
 
 	const int COUNT = 22;
 
@@ -44,6 +48,18 @@ void Level02::LoadContent(ResourceManager& resourceManager)
 		AddGameObject(pEnemy);
 	}
 
+	EnemyBossShip* pBoss = new EnemyBossShip();
+	pBoss->SetTexture(pBossTexture);
+	pBoss->SetCurrentLevel(this);
+
+	Vector2 bossPos;
+	bossPos.Set(Game::GetScreenWidth() * 0.5f, 120.0f); // top area
+	pBoss->Initialize(bossPos, 0.01); // 0 = active right away (or use delay)
+	AddGameObject(pBoss);
+
+	SetBackground(resourceManager.Load<Texture>("Textures\\SpaceBackground03.png"));
+
 	Level::LoadContent(resourceManager);
 }
+
 

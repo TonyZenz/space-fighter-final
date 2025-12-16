@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Level.h"
+#include "Level02.h"
+#include "GameplayScreen.h"
+
 
 /** @brief The first level of the game. */
 class Level01 :	public Level
@@ -16,5 +19,10 @@ public:
 		@param resourceManager A reference to the game's resource manager,
 		used for loading and managing game assets (resources). */
 	virtual void LoadContent(ResourceManager& resourceManager);
+
+	virtual void OnBossDefeated();
 };
+
+	
+
 

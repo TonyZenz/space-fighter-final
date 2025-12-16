@@ -2,12 +2,18 @@
 
 #include "Level01.h"
 #include "BioEnemyShip.h"
+#include "EnemyBossShip.h"
+#include "Blaster.h"
+#include "GameplayScreen.h"
 
 
 void Level01::LoadContent(ResourceManager& resourceManager)
 {
 	// Setup enemy ships
 	Texture *pTexture = resourceManager.Load<Texture>("Textures\\BioEnemyShip.png");
+
+	Texture* pBossTexture = resourceManager.Load<Texture>("Textures\\BioEnemyBoss.png");
+
 
 	const int COUNT = 21;
 
@@ -28,8 +34,7 @@ void Level01::LoadContent(ResourceManager& resourceManager)
 		3.25, 0.25, 0.25, 0.25, 0.25,
 		3.5, 0.3, 0.3, 0.3, 0.3
 	};
-
-	float delay = 3.0; // start delay
+	float delay = 0.0; // start delay
 	Vector2 position;
 
 	for (int i = 0; i < COUNT; i++)
@@ -37,12 +42,27 @@ void Level01::LoadContent(ResourceManager& resourceManager)
 		delay += delays[i];
 		position.Set(xPositions[i] * Game::GetScreenWidth(), -pTexture->GetCenter().Y);
 
-		BioEnemyShip *pEnemy = new BioEnemyShip();
+		BioEnemyShip* pEnemy = new BioEnemyShip();
 		pEnemy->SetTexture(pTexture);
 		pEnemy->SetCurrentLevel(this);
 		pEnemy->Initialize(position, (float)delay);
 		AddGameObject(pEnemy);
+
 	}
+
+	EnemyBossShip* pBoss = new EnemyBossShip();
+	pBoss->SetTexture(pBossTexture);
+	pBoss->SetCurrentLevel(this);
+
+	Blaster* pBossBlaster = new Blaster("Main Blaster");
+	pBossBlaster->SetProjectilePool(GetProjectilePool());
+	pBoss->AttachItem(pBossBlaster, Vector2::UNIT_Y * 20);
+
+	Vector2 bossPos;
+	bossPos.Set(Game::GetScreenWidth() * 0.5f, 120.0f);
+	pBoss->Initialize(bossPos, 0.01);
+	AddGameObject(pBoss);
+
 
 	// Setup background
 	SetBackground(resourceManager.Load<Texture>("Textures\\SpaceBackground01.png"));
@@ -50,3 +70,7 @@ void Level01::LoadContent(ResourceManager& resourceManager)
 	Level::LoadContent(resourceManager);
 }
 
+void Level01::OnBossDefeated()
+{
+	GetGameplayScreen()->LoadLevel(1);
+}
